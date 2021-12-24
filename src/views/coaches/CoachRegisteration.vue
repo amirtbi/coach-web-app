@@ -1,3 +1,3 @@
 <template>
-    Contact A Coach
+    Register
 </template>
