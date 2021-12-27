@@ -1,36 +1,77 @@
 <template>
-  <section>Filter Coach</section>
+  <section>
+    <base-card>
+      Filter Coach
+      <coach-filter @filter-change="setFilters"></coach-filter>
+    </base-card>
+  </section>
   <section class="coaches-section">
     <base-card>
-    <div class="controls">
-      <button class="controls__button controls__button-action">Refresh Coach List</button>
-      <router-link to="/register">Register as Coach</router-link>
-    </div>
-    <ul class="coaches-container" v-if="hasCoaches">
-      <coach-item
-        v-for="coach in coaches"
-        :id="coach.id"
-        :firstname="coach.firstName"
-        :lastname="coach.lastName"
-        :areas="coach.areas"
-        :description="coach.description"
-        :rate="coach.hourlyRate"
-      ></coach-item>
-    </ul>
-    <h3 v-else>No Coaches Found</h3>
+      <div class="controls">
+        <base-button type="outline"> Refresh Coach List </base-button>
+        <base-button link to="/register">Register as Coach</base-button>
+      </div>
+      <ul class="coaches-container" v-if="hasCoaches">
+        <coach-item
+          v-for="coach in filteredCoaches"
+          :id="coach.id"
+          :firstname="coach.firstName"
+          :lastname="coach.lastName"
+          :areas="coach.areas"
+          :description="coach.description"
+          :rate="coach.hourlyRate"
+        ></coach-item>
+      </ul>
+      <h3 v-else>No Coaches Found</h3>
     </base-card>
   </section>
 </template>
 
 <script>
 import coachItem from "../../components/Coach/coachItem.vue";
-import { mapGetters } from "vuex";
+import coachFilter from "../../components/Coach/coachFilter.vue";
+// import { mapGetters } from "vuex";
+
 export default {
   components: {
     coachItem,
+    coachFilter,
+  },
+  data() {
+    return {
+      activeFilters: {
+        frontend: true,
+        backend: true,
+        career: true,
+      },
+    };
   },
   computed: {
-    ...mapGetters("coach", ["coaches", "hasCoaches"]),
+    // ...mapGetters("coach", ["hasCoaches"]),
+    hasCoaches(){
+      return this.$store.getters['coach/hasCoaches'];
+    },
+    filteredCoaches() {
+      const coaches = this.$store.getters["coach/coaches"];
+      return coaches.filter(coach => {
+        if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
+          return true;
+        }
+        if (this.activeFilters.backend && coach.areas.includes("backend")) {
+          return true;
+        }
+        if (this.activeFilters.career && coach.areas.includes("career")) {
+          return true;
+        }
+        return false;
+      });
+    },
+  },
+  methods: {
+    setFilters(udpatedFilters) {
+      this.activeFilters = udpatedFilters;
+      console.log('active filters',this.activeFilters);
+    },
   },
 };
 </script>
@@ -46,20 +87,6 @@ div.controls {
 ul.coaches-container {
   display: flex;
   flex-direction: column;
-
-}
-button{
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  font-family: inherit;
-  cursor: pointer;
-}
-button.controls__button-action{
-  background-color: blue;
-  color:white;
-  padding: 0.75rem 1rem;
-  margin-right: 1rem;
-  
+  padding: 0;
 }
 </style>
