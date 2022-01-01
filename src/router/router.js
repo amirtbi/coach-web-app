@@ -18,7 +18,7 @@ import notFound from '../views/notFound/notFound.vue';
 
 const routes = [
   { path: "/", redirect: "/coaches" },
-  { path: "/coaches", component:CoachesList },
+  { path: "/coaches", component:CoachesList,name:'coaches-list' },
   {
     path: "/coaches/:id",
     component: CoachDetails,

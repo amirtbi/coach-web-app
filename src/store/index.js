@@ -11,12 +11,16 @@ const store = createStore({
     },
     state(){
         return{
-            userId:'c3'
+            userId:'c3',
+            activeCoachId:'c2'
         }
     },
     getters:{
         userId(state){
             return state.userId;
+        },
+        activeCoach(state){
+            return state.activeCoachId;
         }
     }
 

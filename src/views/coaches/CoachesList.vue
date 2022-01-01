@@ -9,7 +9,10 @@
     <base-card>
       <div class="controls">
         <base-button type="outline"> Refresh Coach List </base-button>
-        <base-button link to="/register">Register as Coach</base-button>
+        <!-- Only show when user is not coach or registered alreaddy -->
+        <base-button v-if="!isCoach" link to="/register"
+          >Register as Coach</base-button
+        >
       </div>
       <ul class="coaches-container" v-if="hasCoaches">
         <coach-item
@@ -47,13 +50,16 @@ export default {
     };
   },
   computed: {
-    // ...mapGetters("coach", ["hasCoaches"]),
-    hasCoaches(){
-      return this.$store.getters['coach/hasCoaches'];
+    // Check the logged user is whether coach or not
+    isCoach() {
+      return this.$store.getters["coach/isCoach"];
+    },
+    hasCoaches() {
+      return this.$store.getters["coach/hasCoaches"];
     },
     filteredCoaches() {
       const coaches = this.$store.getters["coach/coaches"];
-      return coaches.filter(coach => {
+      return coaches.filter((coach) => {
         if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
           return true;
         }
@@ -70,7 +76,7 @@ export default {
   methods: {
     setFilters(udpatedFilters) {
       this.activeFilters = udpatedFilters;
-      console.log('active filters',this.activeFilters);
+      console.log("active filters", this.activeFilters);
     },
   },
 };

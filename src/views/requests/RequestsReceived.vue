@@ -6,20 +6,18 @@
       </base-card>
     </header>
     <article>
-     <base-card v-if="hasRequests">   
-
-      <ul >
-        <!-- request-item component -->
-        <request-item
-          v-for="request in requests"
-          :key="request.id"
-          :request="request"
-        ></request-item>
-      </ul>
-     </base-card>
-      <base-card v-else>
+      <base-card>
+        <ul v-if="hasRequests">
+          <!-- request-item component -->
+          <request-item
+            v-for="request in requests"
+            :key="request.id"
+            :request="request"
+          ></request-item>
+        </ul>
         <h4>You have not any requests yet!</h4>
       </base-card>
+      
     </article>
   </section>
 </template>

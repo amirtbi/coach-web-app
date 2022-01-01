@@ -18,7 +18,7 @@ export default {
     return {
       links: [
         { title: "All Coaches", link: "/coaches" },
-        { title: "Requests", link: "/requests" },
+        { title: "Requests", link: "/request" },
       ],
     };
   },

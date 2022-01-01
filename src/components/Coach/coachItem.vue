@@ -3,12 +3,7 @@
         <div class="coach-field">      
         <h3 class="coach-field__title">{{ fullName }}</h3>
         </div>
-       
-        
-        <!-- <div class="coach-field">
-        <h4 class="coach-field__description-title">Description</h4>
-        <p class="coach-field__description">{{ description }}</p>
-        </div> -->
+
         <div class="coach-field">
           <h4 class="coach-field__rate-title">Rate:</h4>
           <span class="coach-field__rate">${{ rate }}/hour</span>
@@ -16,14 +11,13 @@
          <div class="coach-field">
         <!-- <h4 class="coach-field__profession-title">Field of Professions</h4> -->
         <div class="coach-field__areas">
-          <span class="profession-badge" v-for="profession in areas" :key="profession">{{
-            profession
-          }}</span>
+          <base-badge :title='profession' :type='profession' v-for="profession in areas" :key="profession">
+          </base-badge>
         </div>
         </div>
         <div class="actions">
-          <router-link :to="coachContactLink">Contact</router-link>
-          <router-link :to="coachDetailLink">View Details</router-link>
+          <base-button link type='outline' :to="coachContactLink">Contact</base-button>
+          <base-button link  :to="coachDetailLink">View Details</base-button>
         </div>
 
   </li>
@@ -116,15 +110,7 @@ div.coach-field__areas{
   align-items: center;
   justify-content: flex-start;
 }
-span.profession-badge{
-  margin-right: 1rem;
-  background-color: blue;
-  border-radius: 5px;
-  padding: 0.2rem 0.5rem;
-  border: none;
-  color:white;
-  font-family: inherit;
-}
+
 div.actions{
   display: flex;
   flex-direction: row;

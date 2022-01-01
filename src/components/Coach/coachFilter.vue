@@ -30,7 +30,7 @@ export default {
         [inputId]: isActive, // updated value for changed checkbox
       };
       this.filters = updatedFilter;
-      console.log(this.filters);
+      //console.log(this.filters);
       // Emit updatedFilter object through filter-change
       this.$emit("filter-change", updatedFilter);
     },
