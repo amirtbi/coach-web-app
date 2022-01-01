@@ -8,7 +8,7 @@
   <section class="coaches-section">
     <base-card>
       <div class="controls">
-        <base-button type="outline"> Refresh Coach List </base-button>
+        <base-button @click="loadCoaches" type="outline"> Refresh Coach List </base-button>
         <!-- Only show when user is not coach or registered alreaddy -->
         <base-button v-if="!isCoach" link to="/register"
           >Register as Coach</base-button
@@ -59,6 +59,7 @@ export default {
     },
     filteredCoaches() {
       const coaches = this.$store.getters["coach/coaches"];
+      console.log("all coaches:",coaches);
       return coaches.filter((coach) => {
         if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
           return true;
@@ -72,11 +73,18 @@ export default {
         return false;
       });
     },
+    
+  },
+  created() {
+    this.loadCoaches();
   },
   methods: {
     setFilters(udpatedFilters) {
       this.activeFilters = udpatedFilters;
       console.log("active filters", this.activeFilters);
+    },
+    loadCoaches(){
+       this.$store.dispatch('coach/loadCoaches');
     },
   },
 };
