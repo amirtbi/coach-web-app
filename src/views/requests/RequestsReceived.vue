@@ -15,7 +15,7 @@
             :request="request"
           ></request-item>
         </ul>
-        <h4>You have not any requests yet!</h4>
+        <h4 v-else>You have not any requests yet!</h4>
       </base-card>
       
     </article>
