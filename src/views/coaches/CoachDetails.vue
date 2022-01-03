@@ -57,9 +57,16 @@ export default {
   methods: {
     // fetch requested coach info
     fetchCoachInfo(coaches) {
-      this.selectedCoach = coaches.find((coach) => {
-        return coach.id === this.id;
-      });
+      // coaches:[c1:{},c2:{}]
+
+      for(let key in coaches){
+        if(coaches[key].id === this.id){
+          this.selectedCoach = coaches[key]; 
+        }
+      }
+      // this.selectedCoach = coaches.find((coach) => {
+      //   return coach.id === this.id;
+      // });
     },
   },
   created() {

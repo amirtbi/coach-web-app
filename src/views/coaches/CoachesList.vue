@@ -1,5 +1,14 @@
 <template>
   <section>
+    <base-modal v-if="$store.state.error" :title="$store.state.error">
+      <template #header> </template>
+      <template #default>
+        <p id="modal-text">
+          Loading coaches data from server has been experienced some
+          difficulties. Please try again!.
+        </p>
+      </template>
+    </base-modal>
     <base-card>
       Filter Coach
       <coach-filter @filter-change="setFilters"></coach-filter>
@@ -8,13 +17,18 @@
   <section class="coaches-section">
     <base-card>
       <div class="controls">
-        <base-button @click="loadCoaches" type="outline"> Refresh Coach List </base-button>
+        <base-button @click="loadCoaches" type="outline">
+          Refresh Coach List
+        </base-button>
         <!-- Only show when user is not coach or registered alreaddy -->
-        <base-button v-if="!isCoach" link to="/register"
+        <base-button link to="/register"
           >Register as Coach</base-button
         >
       </div>
-      <ul class="coaches-container" v-if="hasCoaches">
+      <div class="spinner-container" v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+      <ul class="coaches-container" v-else-if="hasCoaches && !isLoading">
         <coach-item
           v-for="coach in filteredCoaches"
           :id="coach.id"
@@ -33,6 +47,7 @@
 <script>
 import coachItem from "../../components/Coach/coachItem.vue";
 import coachFilter from "../../components/Coach/coachFilter.vue";
+
 // import { mapGetters } from "vuex";
 
 export default {
@@ -42,6 +57,8 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
+    
       activeFilters: {
         frontend: true,
         backend: true,
@@ -59,7 +76,7 @@ export default {
     },
     filteredCoaches() {
       const coaches = this.$store.getters["coach/coaches"];
-      console.log("all coaches:",coaches);
+      console.log("all coaches:", coaches);
       return coaches.filter((coach) => {
         if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
           return true;
@@ -73,7 +90,6 @@ export default {
         return false;
       });
     },
-    
   },
   created() {
     this.loadCoaches();
@@ -83,8 +99,16 @@ export default {
       this.activeFilters = udpatedFilters;
       console.log("active filters", this.activeFilters);
     },
-    loadCoaches(){
-       this.$store.dispatch('coach/loadCoaches');
+    async loadCoaches() {
+      // Loading is underway
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("coach/loadCoaches");
+      } catch (error) {
+        this.$store.state.error = error.message || "something went wrong!";
+      }
+      // Set isLoading to false, after the coaches were loaded
+      this.isLoading = false;
     },
   },
 };
@@ -102,5 +126,28 @@ ul.coaches-container {
   display: flex;
   flex-direction: column;
   padding: 0;
+}
+div.spinner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+}
+h2 {
+  color: orangered;
+  font-size: bold;
+  margin: 0;
+  padding-top: 1rem;
+}
+p#modal-text {
+  font-size: 1.2rem;
+  color: #defaff;
+  font-family: inherit;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  text-align: justify;
+
 }
 </style>
