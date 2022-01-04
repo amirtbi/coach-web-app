@@ -7,7 +7,8 @@
     </header>
     <article>
       <base-card>
-        <ul v-if="hasRequests">
+        <base-spinner v-if='isLoading'></base-spinner>
+        <ul v-else-if="!isLoading && hasRequests">
           <!-- request-item component -->
           <request-item
             v-for="request in requests"
@@ -30,20 +31,30 @@ export default {
   },
   data() {
     return {
+      isLoading:true
       //   name: "image2.jpg",
     };
   },
   methods: {
-    //   setSrc(name){
-    //     //   const path = `../../statics/images/${name}.jpg`;
-    //     //   const module = import.meta.globEager('../../statics/images/*.jpg');
-    //     //   return module[path].default
-    //     return new URL(`../../statics/images/${name}.jpg`, import.meta.url)
-    //   }
+    async loadMessage(){
+      this.isLoading = true;
+      try{
+        await this.$store.dispatch('request/loadRequests')
+      }
+      catch(error){
+        console.log('error message :',error.message);
+      }
+      this.isLoading = false;
+    }
+  },
+  created() {
+    this.loadMessage();
+    
   },
   computed: {
     requests() {
-      return this.$store.getters["request/receivedMessages"];
+      // return this.$store.getters["request/receivedMessages"];
+      return this.$store.getters['request/receivedMessages']
     },
     hasRequests() {
       return this.$store.getters["request/hasRequest"];
