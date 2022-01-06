@@ -1,6 +1,6 @@
 <template>
   <section>
-    <base-modal v-if="$store.state.error" :title="$store.state.error">
+    <base-modal @close='ErrorHandler' v-if="error"  :title="error">
       <template #header> </template>
       <template #default>
         <p id="modal-text">
@@ -58,7 +58,8 @@ export default {
   data() {
     return {
       isLoading: false,
-    
+      error:null,
+ 
       activeFilters: {
         frontend: true,
         backend: true,
@@ -99,17 +100,21 @@ export default {
       this.activeFilters = udpatedFilters;
       console.log("active filters", this.activeFilters);
     },
+    ErrorHandler(){
+      this.error = null;
+    },
     async loadCoaches() {
       // Loading is underway
       this.isLoading = true;
       try {
         await this.$store.dispatch("coach/loadCoaches");
       } catch (error) {
-        this.$store.state.error = error.message || "something went wrong!";
+        this.error = error.message || "something went wrong!";
       }
       // Set isLoading to false, after the coaches were loaded
       this.isLoading = false;
     },
+  
   },
 };
 </script>

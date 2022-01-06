@@ -1,6 +1,6 @@
 <template>
   <base-modal v-if="$store.state.error" :title="$store.state.error">
-    <template #header> </template>
+    
     <template #default>
       <p id="modal-text">
         Loading coaches data from server has been experienced some difficulties.
