@@ -32,7 +32,7 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       this.formIsValid = true;
       if (
         this.email === "" ||
@@ -49,7 +49,13 @@ export default {
         coachId: this.$route.params.id,
       };
 
-      this.$store.dispatch("request/addMessage", submittedMessage);
+      try{
+
+        await this.$store.dispatch("request/addMessage", submittedMessage);
+      }
+      catch(error){
+        console.log("Error in sending request:",error.message);
+      }
       this.$router.push({ path: "/request" });
     },
   },

@@ -1,5 +1,14 @@
 <template>
   <section>
+    <base-modal @close="ErrorHandler" v-if="error" :title="error">
+      <template #header> </template>
+      <template #default>
+        <p id="modal-text">
+          Loading requests data from server has been experienced some
+          difficulties. Please try again!.
+        </p>
+      </template>
+    </base-modal>
     <header>
       <base-card>
         <h1>List of your requests</h1>
@@ -7,7 +16,9 @@
     </header>
     <article>
       <base-card>
-        <base-spinner v-if='isLoading'></base-spinner>
+        <div v-if="isLoading" class="spinner-container">
+          <base-spinner></base-spinner>
+        </div>
         <ul v-else-if="!isLoading && hasRequests">
           <!-- request-item component -->
           <request-item
@@ -18,7 +29,6 @@
         </ul>
         <h4 v-else>You have not any requests yet!</h4>
       </base-card>
-      
     </article>
   </section>
 </template>
@@ -31,30 +41,32 @@ export default {
   },
   data() {
     return {
-      isLoading:true
+      isLoading: true,
+      error: null,
       //   name: "image2.jpg",
     };
   },
   methods: {
-    async loadMessage(){
+    async loadMessage() {
       this.isLoading = true;
-      try{
-        await this.$store.dispatch('request/loadRequests')
-      }
-      catch(error){
-        console.log('error message :',error.message);
+      try {
+        await this.$store.dispatch("request/loadRequests");
+      } catch (error) {
+        this.error = error.message || "Something went wrong!";
       }
       this.isLoading = false;
-    }
+    },
+    ErrorHandler() {
+      this.error = null;
+    },
   },
   created() {
     this.loadMessage();
-    
   },
   computed: {
     requests() {
       // return this.$store.getters["request/receivedMessages"];
-      return this.$store.getters['request/receivedMessages']
+      return this.$store.getters["request/receivedMessages"];
     },
     hasRequests() {
       return this.$store.getters["request/hasRequest"];
@@ -76,10 +88,21 @@ export default {
 
 <style scoped>
 div.card-container {
-  width: 400px;
+  width: 800px;
   margin-bottom: 0;
 }
-h1,
+div.spinner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+h1 {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
 h4 {
   font-size: 1rem;
   text-align: center;
@@ -101,5 +124,13 @@ h4 {
   padding: 0;
   margin: 0;
   margin-bottom: 0.2rem;
+}
+p#modal-text {
+  font-size: 1.2rem;
+  color: #defaff;
+  font-family: inherit;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  text-align: justify;
 }
 </style>
