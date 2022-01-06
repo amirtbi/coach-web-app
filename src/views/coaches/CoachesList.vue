@@ -17,7 +17,7 @@
   <section class="coaches-section">
     <base-card>
       <div class="controls">
-        <base-button @click="loadCoaches" type="outline">
+        <base-button @click="loadCoaches(true)" type="outline">
           Refresh Coach List
         </base-button>
         <!-- Only show when user is not coach or registered alreaddy -->
@@ -103,11 +103,11 @@ export default {
     ErrorHandler(){
       this.error = null;
     },
-    async loadCoaches() {
+    async loadCoaches(refresh = false) {
       // Loading is underway
       this.isLoading = true;
       try {
-        await this.$store.dispatch("coach/loadCoaches");
+        await this.$store.dispatch("coach/loadCoaches",{forceRefresh:refresh});
       } catch (error) {
         this.error = error.message || "something went wrong!";
       }
