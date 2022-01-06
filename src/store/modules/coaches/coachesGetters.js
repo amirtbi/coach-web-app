@@ -1,5 +1,5 @@
 export default {
-   coaches(state) {
+  coaches(state) {
     return state.coaches;
   },
 
@@ -12,5 +12,16 @@ export default {
     const userId = rootGetters.userId;
     // return true, if at least one coach meets the condition
     return coaches.some((coach) => coach.id === userId);
+  },
+  // Check if the fetch data is needed
+  shouldUpdate(state) {
+    const lastFetch = state.lastFetch;
+    if (!lastFetch) {
+      return true;
+    }
+
+    const currenTime = new Date().getTime(); // Return millisecond
+   
+    return (currenTime - lastFetch) / 1000 > 60; // return Secomd
   },
 };
