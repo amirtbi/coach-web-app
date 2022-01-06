@@ -1,51 +1,52 @@
 import axios from "axios";
 export default {
   async addMessage(context, payLoad) {
-    const userId = new Date().toString();
+    // const userId = new Date().toString();
     const newRequest = {
-      // id:new Date().toString(),
       email: payLoad.email,
-      coachId: payLoad.coachId,
       message: payLoad.message,
+    
     };
     // Sending a new request to server
     const response = await axios({
-      method: "PUT",
-      url: `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${userId}.json`,
+      method: "POST",
+      url: `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${payLoad.coachId}.json`,
       data: newRequest,
     });
 
-    const responseData = await response.data;
+    console.log("send contact data:", response);
+    // const responseData = await response.data;
     if (!response.statusText === ok) {
-      // Error message
+      const newError = newError(response.message);
+      throw newError
     }
-    const request = {
-      ...newRequest,
-      id: userId,
-    };
-    context.commit("addMessage", request);
+    // Adding  id and coachId property, after sending requests to server
+    newRequest.id = response.name;
+    newRequest.coachId = payLoad.coachId;
+   
+    context.commit("addMessage", newRequest);
   },
 
-  async loadRequests(context){
-
+  async loadRequests(context) {
     const coachId = context.rootGetters.userId;
     const response = await axios.get(
-        "https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests.json"
-      );
-    console.log('loaded requests',response.data);
+      `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${coachId}.json`
+    );
+    console.log("loaded requests", response);
     const responseData = response.data;
-    
+     
+    // Helper requests object
     const requests = [];
-    for(let key in responseData){
-        const request = {
-            id:key,
-            message:responseData[key].message,
-            coachId:responseData[key].coachId,
-            email:responseData[key].email
-        }
-        requests.push(request);
+    for(const key in responseData){
+      const request = {
+        id:key, // ==> resposne.name
+        email:responseData[key].email,
+        message:responseData[key].message,
+        coachId:coachId // For particular coach which has been logged
+      }
+      requests.push(request);
     }
-    
-    context.commit('setRequests',requests);
-  }
+    // Set requests array to new values
+    context.commit("setRequests", requests);
+  },
 };

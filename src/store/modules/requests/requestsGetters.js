@@ -2,17 +2,13 @@ import axios from "axios";
 
 export default {
   receivedMessages(state, _, rootGetters) {
+    // Id of logged Coach
     const coachId = rootGetters.userId;
-    // // Gettting data from server
-    // const response = await axios.get(
-    //   "https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests.json"
-    // );
-    // const responseData = await response.data;
-    // console.log("receivedMessageData:", responseData);
-     return state.requests.filter((req) => req.coachId === coachId);
-    //return state.requests
+
+    // Return requests for particular coach
+    return state.requests.filter((req) => req.coachId === coachId);
   },
   hasRequest(state, getters) {
-    return state.requests && state.requests.length > 0;
+    return getters.receivedMessages && getters.receivedMessages.length > 0;
   },
 };
