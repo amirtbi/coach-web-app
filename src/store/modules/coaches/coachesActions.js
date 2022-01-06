@@ -34,17 +34,20 @@ export default {
     context.commit("addNewCoach", newCoach);
   },
 
+
   // Load coaches from firebase
-  async loadCoaches(context) {
+  async loadCoaches(context,payLoad) {
+
+    // Check if fetch data is not needed!
+    if(!payLoad.forceRefresh && !context.getters.shouldUpdate){
+      return;
+    }
+    // Else, load data from serve
     // Getting data from firebase
     const baseUrl =
       "https://coach-app-c1d0e-default-rtdb.firebaseio.com/coaches.json";
 
     const response = await axios.get(baseUrl);
-    console.log("data", response);
-    // const response = await fetch(
-    //   "https://coach-app-c1d0e-default-rtdb.firebaseio.com/coaches.json"
-    // );
 
     // Waiting for json object
     // In case of using fetch Api
@@ -73,5 +76,6 @@ export default {
       coaches.push(coach);
     }
     context.commit("setCoach", coaches);
+    context.commit('setFetchTimeStamp');
   },
 };
