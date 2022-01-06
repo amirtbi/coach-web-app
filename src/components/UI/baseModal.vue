@@ -1,6 +1,6 @@
 <template>
-  <div class="backdrop" v-if="show" @click="tryClose"></div>
   <teleport to="body">
+  <div class="backdrop" v-if="show" @click="tryClose"></div>
     <dialog open v-if="show">
       <div class="modal-container">
         <header class="modal-container__header">
@@ -29,6 +29,7 @@
 
 <script>
 export default {
+  emits:['close'],
   props: ["title"],
   data() {
     return {
@@ -37,7 +38,9 @@ export default {
   },
   methods: {
     tryClose() {
-      this.show = !this.show;
+       this.show = !this.show;
+       this.$emit('close');
+     
     },
   },
 };

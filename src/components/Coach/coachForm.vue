@@ -174,7 +174,7 @@ export default {
         this.formIsValid = false;
       }
     },
-    registerCoach() {
+     registerCoach() {
       this.validateForm();
 
       if (!this.formIsValid) {
@@ -188,7 +188,7 @@ export default {
       const enteredRate = this.rate.val;
 
       const registeredCoach = {
-        id: this.$store.getters.userId,
+        // id: this.$store.getters.userId,
         firstName: enteredFirstName,
         lastName: enteredLastName,
         description: enteredDescription,

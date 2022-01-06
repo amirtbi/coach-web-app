@@ -1,35 +1,33 @@
 <template>
-  
-    <li>
-      <!--profile of user -->
-      <div class="profile-container"></div>
-      <!-- messages and email of user -->
-      <div class="data-container">
-        <a :href="mainLink+request.email">{{ request.email }}</a>
-        <p>{{ request.message }}</p>
-      </div>
-    </li>
-
+  <li>
+    <!--profile of user -->
+    <div class="profile-container"></div>
+    <!-- messages and email of user -->
+    <div class="data-container">
+      <a :href="mainLink + request.email">{{ request.email }}</a>
+      <p>{{ request.message }}</p>
+    </div>
+  </li>
 </template>
 
 <script>
 export default {
-  props:{
-      request:{
-          type:Array,
-          required:true
-      }
+  props: {
+    request: {
+      type: Object,
+      required: true,
+    },
   },
-  computed:{
-      mainLink(){
-          return 'mailto:'
-      }
-  }
+  computed: {
+    mainLink() {
+      return "mailto:";
+    },
+  },
 };
 </script>
 <style scoped>
 div.card-container {
-  width: 400px;
+  width: 800px;
   margin-bottom: 0;
 }
 li {
@@ -48,6 +46,7 @@ p {
   margin-top: 0.5rem;
   margin: 0;
   padding: 0;
+  padding-top: 0.5rem;
   font-size: 0.8rem;
 }
 div.profile-container {
@@ -71,13 +70,17 @@ div.data-container {
   justify-content: center;
   align-items: flex-start;
 }
-a{
-    color:black;
-    text-decoration: none;
-    font-weight: bold;
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
 }
 a:hover,
-a:active{
-    color: purple;
+a:active {
+  color: purple;
+}
+a,p{
+  font-size: 1rem;
+  letter-spacing: 2px;
 }
 </style>

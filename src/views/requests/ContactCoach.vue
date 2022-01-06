@@ -1,4 +1,5 @@
 <template>
+
   <form @submit.prevent="submitForm">
     <div class="form-control">
       <label for="email">Your E-Mail</label>
@@ -29,7 +30,12 @@ export default {
       email: "",
       message: "",
       formIsValid: true,
+      contactIsOpened: false,
     };
+  },
+
+  computed: {
+    
   },
   methods: {
     async submitForm() {
@@ -49,15 +55,14 @@ export default {
         coachId: this.$route.params.id,
       };
 
-      try{
-
+      try {
         await this.$store.dispatch("request/addMessage", submittedMessage);
-      }
-      catch(error){
-        console.log("Error in sending request:",error.message);
+      } catch (error) {
+        console.log("Error in sending request:", error.message);
       }
       this.$router.push({ path: "/request" });
     },
+
   },
 };
 </script>
