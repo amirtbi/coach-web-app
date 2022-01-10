@@ -5,23 +5,17 @@
     <!-- messages and email of user -->
     <div class="data-container">
       <div class="image-container">
-        <img
-          id="image-profile"
-          :src="imageSource"
-          alt="user-profile"
-        />
+        <img id="image-profile" :src="imageSource" alt="user-profile" />
       </div>
       <div>
         <a :href="mainLink + request.email">{{ request.email }}</a>
         <p>{{ request.message }}</p>
-
       </div>
     </div>
   </li>
 </template>
 
 <script>
-
 export default {
   props: {
     request: {
@@ -29,11 +23,7 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      image: this.request.profile,
-    };
-  },
+ 
   computed: {
     mainLink() {
       return "mailto:";
@@ -46,10 +36,8 @@ export default {
       return modules[path].default;
     },
   },
-  methods: {},
-  created() {
-    console.log(this.request);
-  },
+ 
+ 
 };
 </script>
 <style scoped>
@@ -88,15 +76,15 @@ div.profile-container {
   margin-right: 1rem;
   border: 1px solid black;
 }
-div.image-container{
+div.image-container {
   margin-right: 2rem;
 }
 div.image-container img {
-    width: 80px;
-    border-radius: 100%;
-    padding: 0;
-    margin: 0;
-    border: 1px solid black;
+  width: 80px;
+  border-radius: 100%;
+  padding: 0;
+  margin: 0;
+  border: 1px solid black;
 }
 div.data-container {
   display: flex;

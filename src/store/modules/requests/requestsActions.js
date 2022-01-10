@@ -1,10 +1,13 @@
 import axios from "axios";
 export default {
   async addMessage(context, payLoad) {
+    // Random number
+    const rndImage = Math.floor(Math.random()*(4-1)+1); // Between 3 and 1
     // const userId = new Date().toString();
     const newRequest = {
       email: payLoad.email,
       message: payLoad.message,
+      profile:`image${rndImage}`
     
     };
     // Sending a new request to server
@@ -30,7 +33,7 @@ export default {
   async loadRequests(context) {
     const coachId = context.rootGetters.userId;
     const response = await axios.get(
-      `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${coachId}.json`
+      `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${coachId}.json`,{timeout:1000}
     );
     console.log("loaded requests", response);
     const responseData = response.data;
@@ -42,6 +45,7 @@ export default {
         id:key, // ==> resposne.name
         email:responseData[key].email,
         message:responseData[key].message,
+        profile:responseData[key].profile,
         coachId:coachId // For particular coach which has been logged
       }
       requests.push(request);
