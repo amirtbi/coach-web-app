@@ -1,16 +1,27 @@
 <template>
   <li>
     <!--profile of user -->
-    <div class="profile-container"></div>
+    <!-- <div class="profile-container"></div> -->
     <!-- messages and email of user -->
     <div class="data-container">
-      <a :href="mainLink + request.email">{{ request.email }}</a>
-      <p>{{ request.message }}</p>
+      <div class="image-container">
+        <img
+          id="image-profile"
+          :src="imageSource"
+          alt="user-profile"
+        />
+      </div>
+      <div>
+        <a :href="mainLink + request.email">{{ request.email }}</a>
+        <p>{{ request.message }}</p>
+
+      </div>
     </div>
   </li>
 </template>
 
 <script>
+
 export default {
   props: {
     request: {
@@ -18,10 +29,26 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      image: this.request.profile,
+    };
+  },
   computed: {
     mainLink() {
       return "mailto:";
     },
+    imageSource() {
+      // Binding dynamic image source in 'Vite'
+      // In case of vueCli, use require
+      const path = `../../statics/images/${this.request.profile}.png`;
+      const modules = import.meta.globEager("../../statics/images/*.png");
+      return modules[path].default;
+    },
+  },
+  methods: {},
+  created() {
+    console.log(this.request);
   },
 };
 </script>
@@ -53,22 +80,30 @@ div.profile-container {
   width: 60px;
   height: 60px;
   border-radius: 100%;
-  background-image: url("../../statics/images/image1.jpg");
+  /* background-image: url("../../statics/images/image1.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-origin: content-box;
+  background-origin: content-box; */
   margin-right: 1rem;
   border: 1px solid black;
 }
-div.profile-container img {
-  width: 100%;
+div.image-container{
+  margin-right: 2rem;
+}
+div.image-container img {
+    width: 80px;
+    border-radius: 100%;
+    padding: 0;
+    margin: 0;
+    border: 1px solid black;
 }
 div.data-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
 }
 a {
   color: black;
@@ -79,7 +114,8 @@ a:hover,
 a:active {
   color: purple;
 }
-a,p{
+a,
+p {
   font-size: 1rem;
   letter-spacing: 2px;
 }
