@@ -19,6 +19,7 @@ export default {
       links: [
         { title: "All Coaches", link: "/coaches" },
         { title: "Requests", link: "/request" },
+        { title: "Login", link: "/login" },
       ],
     };
   },
