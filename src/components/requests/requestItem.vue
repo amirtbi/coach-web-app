@@ -36,6 +36,16 @@ export default {
       return modules[path].default;
     },
   },
+  beforeRouteEnter (to, from, next) {
+    const userIsAuth = this.$store.getters['users/userIsValid'];
+    if(userIsAuth){
+      next();
+    }else{
+      console.log("First,login");
+      next({path:'/login'});
+    }
+  }
+
  
  
 };
