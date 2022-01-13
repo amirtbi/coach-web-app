@@ -18,5 +18,8 @@ export default{
     },
     userIsValid(state){
         return state.userIsValid;
+    },
+    userIsAuth(state){
+        return state.userIsAuth;
     }
 }
