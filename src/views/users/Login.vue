@@ -9,7 +9,7 @@
         <input
           type="text"
           id="username"
-          v-model="enteredUsername"
+          v-model.trim="enteredUsername"
           placeholder="username"
         />
       </div>
@@ -18,8 +18,16 @@
         <input
           type="email"
           id="email"
-          v-model="enteredEmail"
+          v-model.trim="enteredEmail"
           placeholder="name@email.com"
+        />
+      </div>
+       <div class="form-controls">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          v-model.trim="enteredPassword"
         />
       </div>
       <div class="actions">
@@ -35,16 +43,31 @@ export default {
     return {
       enteredUsername: "",
       enteredEmail: "",
+      enteredPassword:"",
     };
+  },
+  computed:{
+    userIsValid(){
+      return this.$store.getters['users/userIsValid'];
+    }
   },
   methods: {
     submitForm() {
       const enteredData = {
-        email: this.enteredUsername,
-        username: this.enteredEmail,
+        email: this.enteredEmail,
+        username: this.enteredUsername,
+        password:this.enteredPassword
       };
 
       this.$store.dispatch("users/login", enteredData);
+      console.log(this.userIsValid);
+      if(this.userIsValid){
+        this.$router.push({path:'/coaches'});
+      }else{
+        alert("Not valid data");
+      }
+
+      
     },
   },
 };
