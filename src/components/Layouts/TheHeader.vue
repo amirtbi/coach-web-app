@@ -5,8 +5,14 @@
         <router-link to="/">Find a coach</router-link>
       </h1>
       <ul class="main-header__links">
-        <li class="main-header__link" v-for="item in links" :key="item.title">
-          <router-link  :to="item.link">{{ item.title }}</router-link>
+        <li class="main-header__link">
+          <router-link  to="/coaches">Coaches</router-link>
+        </li>
+        <li v-if='userIsAuth' class="main-header__link">
+          <router-link to='/requests'>Requests</router-link>
+        </li>
+        <li class="main-header__link">
+          <router-link @click="navigateHandler"  :to="activeLink">{{ userIsAuth ? 'Logout' : 'Login' }}</router-link>
         </li>
       </ul>
     </nav>
@@ -14,15 +20,31 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      links: [
-        { title: "All Coaches", link: "/coaches" },
-        { title: "Requests", link: "/request" },
-        { title: "Login", link: "/login" },
-      ],
-    };
+
+  computed:{
+    userIsAuth(){
+      return this.$store.getters['users/userIsValid'];
+    },
+    activeLink(){
+      return '/login';
+    },
+    linkText(){
+      if(this.userIsAuth){
+        return 'Hi!'
+      }else{
+        return 'Login'
+      }
+    }
   },
+  methods:{
+    navigateHandler(){
+      if(this.userIsAuth){
+        this.$store.dispatch("users/logout");
+      }else{
+        this.$router.push("/login");
+      }
+    }
+  }
 };
 </script>
 
