@@ -13,7 +13,7 @@ const store = createStore({
     },
     state(){
         return{
-            userId:'c5', // Id of logged coach
+            userId:'c5', // Id of logged user/coach
             newUser:'c4',
             activeCoachId:'c2',
             error: null,

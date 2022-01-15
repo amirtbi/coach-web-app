@@ -9,7 +9,7 @@
           <router-link  to="/coaches">Coaches</router-link>
         </li>
         <li v-if='userIsAuth' class="main-header__link">
-          <router-link to='/requests'>Requests</router-link>
+          <router-link to='/request'>Requests</router-link>
         </li>
         <li class="main-header__link">
           <router-link @click="navigateHandler"  :to="activeLink">{{ userIsAuth ? 'Logout' : 'Login' }}</router-link>
@@ -28,17 +28,12 @@ export default {
     activeLink(){
       return '/login';
     },
-    linkText(){
-      if(this.userIsAuth){
-        return 'Hi!'
-      }else{
-        return 'Login'
-      }
-    }
+ 
   },
   methods:{
     navigateHandler(){
       if(this.userIsAuth){
+        
         this.$store.dispatch("users/logout");
       }else{
         this.$router.push("/login");

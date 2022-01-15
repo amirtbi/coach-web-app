@@ -45,6 +45,7 @@ export default {
       enteredUserName: "",
       enteredPassword: "",
       enteredEmail: "",
+      userIndex: null,
     };
   },
 
@@ -55,6 +56,16 @@ export default {
   },
 
   methods: {
+    checkDataEntry() {
+      const users = this.Users;
+      //Check user is whether new or not
+      this.userIndex = users.findIndex((user) => {
+        return (
+          user.email === this.enteredEmail ||
+          user.userName === this.enteredUserName
+        );
+      });
+    },
     async submitForm() {
       const newUser = {
         username: this.enteredUserName,
@@ -62,15 +73,7 @@ export default {
         password: this.enteredPassword,
       };
 
-      const users = this.Users;
-      //Check user is whether new or not
-      const userIsNew = users.findIndex((user) => {
-        return (
-          user.email === this.enteredEmail ||
-          user.userName === this.enteredUserName
-        );
-      });
-      if (userIsNew < 0) {
+      if (this.userIndex < 0) {
         try {
           await this.$store.dispatch("users/registerUser", newUser);
           this.$router.push({ path: "/coaches" });
@@ -79,6 +82,9 @@ export default {
         }
       } else {
         console.log("The user is already has been registered!");
+        this.enteredEmail = '';
+        this.enteredPassword = '';
+        this.enteredUserName = '';
       }
     },
   },

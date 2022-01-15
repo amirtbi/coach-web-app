@@ -4,7 +4,7 @@ export default {
   async register(context, payLoad) {
     console.log("adding new coaches");
     //  const userId = context.rootGetters.newUser;
-    const userId = 'c5';
+    const userId = 'c3';
  
 
     // Storing dataform in firebase database,

@@ -17,6 +17,7 @@ import notFound from "../views/notFound/notFound.vue";
 
 // import users feature
 import Login from "../views/users/Login.vue";
+import UserSignup from '../views/users/UserSignup.vue';
 //routes
 
 const routes = [
@@ -58,6 +59,7 @@ const routes = [
   { path: "/", component: Home },
   { path: "/home", name: "home-page", component: Home },
   { path: "/login", name: "login-page", component: Login },
+  { path: "/userSignup", name: "Signup-page", component: UserSignup },
 ];
 
 const router = new createRouter({
