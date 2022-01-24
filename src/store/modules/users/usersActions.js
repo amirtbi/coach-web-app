@@ -1,7 +1,5 @@
 import axios from "axios";
 
-
-
 const setAuth = (payLoad, users) => {
   const userIsValid = users.findIndex((user) => {
     if (
@@ -20,7 +18,7 @@ const setAuth = (payLoad, users) => {
   }
 };
 
-const userValidation = async (users,enteredData)=>{
+const userValidation = async (enteredData) => {
   const response = await axios({
     url: "https://coach-app-c1d0e-default-rtdb.firebaseio.com/users.json",
     method: "GET",
@@ -29,24 +27,26 @@ const userValidation = async (users,enteredData)=>{
   const responseData = await response.data;
 
   const fetchedUsers = [];
-  for(const key in responseData){
+  for (const key in responseData) {
     const user = {
-      id:key,
-      email:responseData[key].email,
-      password:responseData[key].password,
-      username :responseData[key].userName
-    }
+      id: key,
+      email: responseData[key].email,
+      password: responseData[key].password,
+      username: responseData[key].userName,
+    };
     fetchedUsers.push(user);
   }
 
-  const userIndex = users.findIndex(user=>{
-    return user.
-  })
-  return fetchedUsers;
+  // camparing data using server
+  const user = fetchedUsers.find((user) => {
+    return (
+      user.email === enteredData.email && user.password === enteredData.password
+    );
+  });
+  return user;
 };
 
 export default {
-  
   async login(context, payLoad) {
     const requestedInfo = {
       email: payLoad.email,
@@ -54,26 +54,29 @@ export default {
       password: payLoad.password,
     };
 
-    const users = this.getters['users/users'];  
     // user-validation
-    const userIndex = await userValidation(users,requestedInfo);
+    try{
 
-    console.log("fetcher users",userIndex);
-  
-
-    if(context.getters['users/hasUsers']){
-      const userIsAuth = setAuth(requestedInfo, users); // return true if isAuth
-      context.commit("setValidation", userIsAuth);
-      requestedInfo.isAuth = userIsAuth;
+      const userLogged = await userValidation(requestedInfo);
+      console.log(userLogged);
+      if (userLogged) {
+        context.commit("setValidation", true);
+      } else {
+        return;
+      }
     }
-
+    catch(error){
+      context.state.error = error.message;
+    }
+    
+    
+    
   },
   logout(context) {
     context.commit("setValidation", false);
     context.commit("setAuth");
   },
 
-  
   async registerUser(context, payLoad) {
     const newUser = {
       userName: payLoad.username,

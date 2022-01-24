@@ -9,6 +9,7 @@ export default {
       userIsValid: null,
       userIsAuth: null,
       validLogin:null,
+      error:null,
       users: [],
     };
   },

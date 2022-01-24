@@ -1,8 +1,9 @@
 <template>
   <base-card>
-    <form class="form-container" @submit.prevent="submitForm">
+    <form class="form-container" @submit.prevent="login">
       <div class="title-container">
         <h1 id="title">Login</h1>
+        <small v-if="error" id="warning-error">{{ error }}!</small>
       </div>
       <div class="form-controls">
         <label for="username">Username</label>
@@ -49,6 +50,7 @@ export default {
       enteredEmail: "",
       enteredPassword: "",
       userIndex: null,
+   
     };
   },
   computed: {
@@ -58,42 +60,27 @@ export default {
     users() {
       return this.$store.getters["users/users"];
     },
+    error(){
+      return this.$store.getters['users/error'];
+    }
   },
-  created() {
-    // Loading users from firebase 
-    
-  },
+
   methods: {
-    
-    async loadUsers(){
-
-      const response = await axios({
-        method:'GET',
-        url:'https://coach-app-c1d0e-default-rtdb.firebaseio.com/users.json'
-      });
-
-      const responseDate = response.data;
-      
-    },
-
-     submitForm() {
+    async login() {
       const enteredData = {
         email: this.enteredEmail,
         username: this.enteredUsername,
         password: this.enteredPassword,
       };
-      
-      this.$store.dispatch("users/login", enteredData);
-      // Clearing user input
-      // this.enteredEmail = "";
-      // this.enteredUsername = "";
-      // this.enteredPassword = "";
 
-      // if (this.userIsValid) {
-      //   this.$router.push({ path: "/coaches" });
-      // } else {
-      //   alert("Not valid data");
-      // }
+      try {
+        await this.$store.dispatch("users/login", enteredData);
+        if (this.userIsValid) {
+          this.$router.push({ path: "/coaches" });
+        }
+      } catch (error) {
+        this.$store.error = error.message;
+      }
     },
   },
   created() {
@@ -162,5 +149,11 @@ p.register a:active {
 #title {
   text-align: center;
   letter-spacing: 2px;
+}
+#warning-error{
+  font-size: 1rem;
+  color:red;
+  margin-left: 1.2rem;
+
 }
 </style>

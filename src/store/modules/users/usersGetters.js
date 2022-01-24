@@ -16,5 +16,8 @@ export default {
   hasUsers(state){
       return state.users && state.users.length >0
 
+  },
+  error(state){
+    return state.error;
   }
 };
