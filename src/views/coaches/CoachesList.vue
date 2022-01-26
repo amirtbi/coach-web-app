@@ -1,47 +1,56 @@
 <template>
-  <section>
-    <base-modal @close='ErrorHandler' v-if="error"  :title="error">
-      <template #header> </template>
-      <template #default>
-        <p id="modal-text">
-          Loading coaches data from server has been experienced some
-          difficulties. Please try again!.
-        </p>
-      </template>
-    </base-modal>
-    <base-card>
-      Filter Coach
-      <coach-filter @filter-change="setFilters"></coach-filter>
-    </base-card>
-  </section>
-  <section class="coaches-section">
-    <base-card>
-      <div class="controls">
-        <base-button @click="loadCoaches(true)" type="outline">
-          Refresh Coach List
-        </base-button>
-        <!-- Only show when user is not coach or registered alreaddy -->
-        <base-button link to="/register"
-          >Register as Coach</base-button
-        >
-      </div>
-      <div class="spinner-container" v-if="isLoading">
-        <base-spinner></base-spinner>
-      </div>
-      <ul class="coaches-container" v-else-if="hasCoaches && !isLoading">
-        <coach-item
-          v-for="coach in filteredCoaches"
-          :id="coach.id"
-          :firstname="coach.firstName"
-          :lastname="coach.lastName"
-          :areas="coach.areas"
-          :description="coach.description"
-          :rate="coach.hourlyRate"
-        ></coach-item>
-      </ul>
-      <h3 v-else>No Coaches Found</h3>
-    </base-card>
-  </section>
+  <base-modal @close="ErrorHandler" v-if="error && show" :title="error">
+    <template #default>
+      <p id="modal-text">
+        Loading coaches data from server has been experienced some difficulties.
+        Please try again!.
+      </p>
+    </template>
+  </base-modal>
+
+  <transition name="fade">
+    <div v-if="show">
+      <section>
+        <base-card>
+          Filter Coach
+          <coach-filter @filter-change="setFilters"></coach-filter>
+        </base-card>
+      </section>
+      <!-- Coaches list -->
+      <section class="coaches-section">
+        <base-card>
+          <div class="controls">
+            <base-button @click="loadCoaches(true)" type="outline">
+              Refresh Coach List
+            </base-button>
+            <!-- Only show when user is not coach or registered alreaddy -->
+            <base-button link to="/register">Register as Coach</base-button>
+          </div>
+
+          <section>
+            <div class="spinner-container" v-if="isLoading">
+              <base-spinner></base-spinner>
+            </div>
+
+            <transition-group name="coachesList" tag="ul" class="coaches-container" v-else-if="hasCoaches && !isLoading">
+              <coach-item
+                v-for="coach in filteredCoaches"
+                :id="coach.id"
+                :key="coach.id"
+                :firstname="coach.firstName"
+                :lastname="coach.lastName"
+                :areas="coach.areas"
+                :description="coach.description"
+                :rate="coach.hourlyRate"
+              ></coach-item>
+            </transition-group>
+
+            <h3 v-else>No Coaches Found</h3>
+          </section>
+        </base-card>
+      </section>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -58,14 +67,17 @@ export default {
   data() {
     return {
       isLoading: false,
-      error:null,
- 
+      error: null,
+      show: false,
       activeFilters: {
         frontend: true,
         backend: true,
         career: true,
       },
     };
+  },
+  mounted() {
+    this.show = true;
   },
   computed: {
     // Check the logged user is whether coach or not
@@ -96,25 +108,29 @@ export default {
     this.loadCoaches();
   },
   methods: {
+    beforeRouteLeave(to, from, next) {
+      this.show = false;
+    },
     setFilters(udpatedFilters) {
       this.activeFilters = udpatedFilters;
       console.log("active filters", this.activeFilters);
     },
-    ErrorHandler(){
+    ErrorHandler() {
       this.error = null;
     },
-    async loadCoaches(refresh = false) {
+    async loadCoaches(refresh = true) {
       // Loading is underway
       this.isLoading = true;
       try {
-        await this.$store.dispatch("coach/loadCoaches",{forceRefresh:refresh});
+        await this.$store.dispatch("coach/loadCoaches", {
+          forceRefresh: refresh,
+        });
       } catch (error) {
         this.error = error.message || "something went wrong!";
       }
       // Set isLoading to false, after the coaches were loaded
       this.isLoading = false;
     },
-  
   },
 };
 </script>
@@ -153,6 +169,51 @@ p#modal-text {
   margin: 0;
   padding: 0.5rem 1rem;
   text-align: justify;
+}
 
+.fade-enter-from {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+.fade-enter-active {
+  transition: all 1s ease-in;
+}
+.fade-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.dialog-enter-active {
+  animation: fade-in 1s ease-in-out;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.coachesList-enter-from,
+.coachesList-leave-to{
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.coachesList-enter-active,
+.coachesList-leave-active{
+  transition: all 0.5s ease;
+}
+.coachesList-enter-to,
+.coachesList-leave-from{
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.coachesList-move{
+  transition: transform 0.8s ease;
 }
 </style>

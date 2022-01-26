@@ -15,7 +15,7 @@ export default {
           areas: ["frontend", "backend", "career"],
           description:
             "I'm Maximilian and I've worked as a freelance web developer for years. Let me help you become a developer as well!",
-          hourlyRate: 30,
+          hourlyRate: "30",
         },
         // {
         //   id: "c2",

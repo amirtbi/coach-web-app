@@ -1,5 +1,6 @@
 <template>
-  <base-card>
+  <transition name="fade">
+  <base-card v-if='show'>
     <form class="form-container" @submit.prevent="login">
       <div class="title-container">
         <h1 id="title">Login</h1>
@@ -40,6 +41,7 @@
       </div>
     </section>
   </base-card>
+  </transition>
 </template>
 
 <script>
@@ -50,8 +52,13 @@ export default {
       enteredEmail: "",
       enteredPassword: "",
       userIndex: null,
+      error:null,
+      show:false
    
     };
+  },
+  mounted() {
+    this.show = true;
   },
   computed: {
     userIsValid() {
@@ -60,12 +67,20 @@ export default {
     users() {
       return this.$store.getters["users/users"];
     },
-    error(){
-      return this.$store.getters['users/error'];
-    }
+    // error(){
+    //   return this.$store.getters['users/error'];
+    // }
+
   },
 
   methods: {
+    beforeRouteLeave (to, from, next) {
+      // Animation display
+      this.show = false;
+    },
+    close(){
+      this.error = null;
+    },
     async login() {
       const enteredData = {
         email: this.enteredEmail,
@@ -77,9 +92,11 @@ export default {
         await this.$store.dispatch("users/login", enteredData);
         if (this.userIsValid) {
           this.$router.push({ path: "/coaches" });
+        }else{
+          this.error = "Not valid user";
         }
       } catch (error) {
-        this.$store.error = error.message;
+        this.error = error.message;
       }
     },
   },
@@ -155,5 +172,17 @@ p.register a:active {
   color:red;
   margin-left: 1.2rem;
 
+}
+/* Animation */
+.fade-enter-from{
+  opacity:0;
+  transform: translateY(-100px)
+}
+.fade-enter-active{
+  transition: all 1s ease-in-out;
+}
+.fade-enter-to{
+  opacity: 1;
+   transform: translateY(0px)
 }
 </style>

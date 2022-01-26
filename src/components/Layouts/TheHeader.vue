@@ -2,7 +2,7 @@
   <header class="main-header">
     <nav class="main-header__nav">
       <h1 class="main-header__title">
-        <router-link to="/">Find a coach</router-link>
+        <router-link to="/coaches">Find a coach</router-link>
       </h1>
       <ul class="main-header__links">
         <li class="main-header__link">

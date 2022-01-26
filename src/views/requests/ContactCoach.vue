@@ -1,6 +1,6 @@
 <template>
-
-  <form @submit.prevent="submitForm">
+  <transition name="fade-in">
+  <form v-if="show" @submit.prevent="submitForm">
     <div class="form-control">
       <label for="email">Your E-Mail</label>
       <input
@@ -21,6 +21,7 @@
       <base-button>Send Your Message</base-button>
     </div>
   </form>
+  </transition>
 </template>
 
 <script>
@@ -31,13 +32,15 @@ export default {
       message: "",
       formIsValid: true,
       contactIsOpened: false,
+      show:false
+    
     };
   },
 
-  computed: {
-    
-  },
   methods: {
+    beforeRouteLeave (to, from, next) {
+      this.show = false;
+    },
     async submitForm() {
       this.formIsValid = true;
       if (
@@ -63,6 +66,10 @@ export default {
       this.$router.push({ path: "/request" });
     },
 
+
+  },
+  mounted() {
+    this.show = true;
   },
 };
 </script>
@@ -93,5 +100,17 @@ label {
 .text-warning {
   color: orangered;
   font-weight: bold;
+}
+
+.fade-in-enter-from{
+  opacity: 0;
+  transform: translateY(-100px);
+}
+.fade-in-enter-active{
+  transition: all 1s ease-in;
+}
+.fade-in-enter-to{
+  opacity: 1;
+  transform: translateY(0px);
 }
 </style>

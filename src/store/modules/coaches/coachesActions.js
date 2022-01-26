@@ -40,6 +40,7 @@ export default {
 
     // Check if fetch data is not needed!
     if(!payLoad.forceRefresh && !context.getters.shouldUpdate){
+      console.log("Not neeeded refresh");
       return;
     }
     // Else, load data from serve

@@ -1,5 +1,6 @@
 <template>
-  <section>
+<transition name="fade-in">
+  <section v-if='show'>
     <base-modal @close="ErrorHandler" v-if="error" :title="error">
       <template #header> </template>
       <template #default>
@@ -31,6 +32,7 @@
       </base-card>
     </article>
   </section>
+</transition>
 </template>
 
 <script>
@@ -43,10 +45,18 @@ export default {
     return {
       isLoading: true,
       error: null,
-      //   name: "image2.jpg",
+      show:false // intiial value for animation handling
+      
     };
   },
+  mounted() {
+    this.show = true;
+  },
   methods: {
+    beforeRouteLeave (to, from, next) {
+      // Route animation display
+      this.show = false;
+    },
     async loadMessage() {
       this.isLoading = true;
       try {
@@ -71,17 +81,7 @@ export default {
     hasRequests() {
       return this.$store.getters["request/hasRequest"];
     },
-    // activeCoach(){
-    //     const activeCoach = this.$store.getters.activeCoach;
-    //     const requests =  this.$store.getters["request/receivedMessages"];
-    //     for(let request of requests){
-    //         if(request.coachId === activeCoach){
-    //             return true
-    //         }
-    //         return;
-    //     }
-
-    // }
+   
   },
 };
 </script>
@@ -132,5 +132,18 @@ p#modal-text {
   margin: 0;
   padding: 0.5rem 1rem;
   text-align: justify;
+}
+
+.fade-in-enter-from{
+  opacity:0;
+  transform: translateX(-100px);
+}
+
+.fade-in-enter-active{
+  transition: all 1s ease-in-out;
+}
+.fade-in-enter-to{
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

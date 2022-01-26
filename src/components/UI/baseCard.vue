@@ -1,7 +1,9 @@
 <template>
+
     <div class="card-container">
         <slot></slot>
     </div>
+
 </template>
 
 
@@ -14,4 +16,5 @@
     margin: 2rem auto;
     border-radius: 12px;
 }
+
 </style>

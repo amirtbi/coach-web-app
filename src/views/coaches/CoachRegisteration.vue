@@ -1,6 +1,6 @@
 <template>
+<div>
   <base-modal v-if="$store.state.error" :title="$store.state.error">
-    
     <template #default>
       <p id="modal-text">
         Loading coaches data from server has been experienced some difficulties.
@@ -9,6 +9,7 @@
     </template>
   </base-modal>
   <coach-form @register-coach="addCoach"></coach-form>
+</div>
 </template>
 
 <script>
