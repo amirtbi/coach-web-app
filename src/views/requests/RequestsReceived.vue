@@ -3,9 +3,9 @@
     <section>
       <base-modal
         @closeHandler="close"
-        v-if="error"
-        description="Loading requests has faced some difficulties"
-        :title="error"
+        v-if="!!error"
+        :description="error"
+        title="An error occured"
       >
       </base-modal>
       <header>
