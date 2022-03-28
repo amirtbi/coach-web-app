@@ -32,14 +32,7 @@ const routes = [
       {
         path: "contact",
         component: ContactCoach,
-        // beforeEnter: (to, from, next) => {
-        //   if (store.getters["users/userIsValid"]) {
-        //     next();
-        //   } else {
-        //     next({ path: "/login" });
-        //   }
-        // },
-      }, // /coaches/c1/contact
+      },
     ],
   },
   { path: "/register", component: coachRegisteration },
@@ -51,7 +44,6 @@ const routes = [
   { path: "/auth", component: UserAuth },
   { path: "/:notFound(.*)", component: notFound },
 
-  { path: "/login", name: "login-page", component: Login },
   // { path: "/userSignup", name: "Signup-page", component: UserSignup },
 ];
 

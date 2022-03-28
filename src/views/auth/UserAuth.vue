@@ -1,17 +1,21 @@
 <template>
   <div>
-    <base-modal title="authentication" v-if="isLoading">
+    <base-modal title="Authenticating..." v-if="isLoading">
       <base-spinner></base-spinner>
     </base-modal>
     <base-modal
-      title="authenticated..."
+      title="An error occured..."
       v-if="!!error"
       :description="error"
       @closeHandler="closeModal"
     >
     </base-modal>
     <base-card>
-      <form class="form-container" @submit.prevent="submitForm">
+      <form
+        v-if="!isLoggedIn"
+        class="form-container"
+        @submit.prevent="submitForm"
+      >
         <div class="title-container">
           <h1 id="title">Login</h1>
           <small v-if="!formIsValid" id="warning-error"
@@ -20,7 +24,7 @@
         </div>
 
         <div class="form-controls">
-          <label for="username">Email</label>
+          <label for="username">E-mail</label>
           <input
             type="email"
             id="email"
@@ -39,6 +43,10 @@
           }}</base-button>
         </div>
       </form>
+      <div v-else>
+        <h3>User Loggedin successfully</h3>
+        <base-button @click="logout">Logout</base-button>
+      </div>
     </base-card>
   </div>
 </template>
@@ -56,6 +64,9 @@ export default {
     };
   },
   computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
     submitButtonCaption() {
       if (this.mode === "login") {
         return "Login";
@@ -76,6 +87,10 @@ export default {
       this.isLoading = false;
       this.error = null;
     },
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.replace("/coaches");
+    },
     async submitForm() {
       this.formIsValid = true;
       // Checking entered values
@@ -93,16 +108,14 @@ export default {
         email: this.email,
         password: this.password,
       };
-
       try {
         if (this.mode === "login") {
+          await this.$store.dispatch("login", userEntry);
         } else {
           ///
-          await this.$store.dispatch("signup", {
-            email: this.email,
-            password: this.password,
-          });
+          await this.$store.dispatch("signup", userEntry);
         }
+        this.$router.replace("/coaches");
       } catch (err) {
         console.log("Error", err.message);
         this.error = err.message || "Failed to authenticate";

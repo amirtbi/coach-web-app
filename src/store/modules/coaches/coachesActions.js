@@ -3,28 +3,21 @@ import axios from "axios";
 export default {
   async register(context, payLoad) {
     console.log("adding new coaches");
-    //  const userId = context.rootGetters.newUser;
-    const userId = 'c3';
- 
 
-    // Storing dataform in firebase database,
-    // using fetch api
-    // const response = await fetch(
-    //   `https://coach-app-c1d0e-default-rtdb.firebaseio.com/coaches/${userId}.json`,
-    //   {
-    //     method: "PUT",
-    //     body: JSON.stringify(payLoad),
-    //   }
-    // );
+    // Get token of logged user
+    const userId = context.rootGetters.userId;
+    const token = context.rootGetters.token;
+
     // sending using Axios
-
     const response = await axios({
-        method:'PUT',
-        url:`https://coach-app-c1d0e-default-rtdb.firebaseio.com/coaches/${userId}.json`,
-        data:payLoad
-    })
+      method: "PUT",
+      url:
+        `https://coach-app-c1d0e-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=` +
+        token,
+      data: payLoad,
+    });
     //const responseData = await response.json();
-    if (!response.statusText === 'ok') {
+    if (!response.statusText === "ok") {
       // error
     }
     const newCoach = {
@@ -34,12 +27,10 @@ export default {
     context.commit("addNewCoach", newCoach);
   },
 
-
   // Load coaches from firebase
-  async loadCoaches(context,payLoad) {
-
+  async loadCoaches(context, payLoad) {
     // Check if fetch data is not needed!
-    if(!payLoad.forceRefresh && !context.getters.shouldUpdate){
+    if (!payLoad.forceRefresh && !context.getters.shouldUpdate) {
       console.log("Not neeeded refresh");
       return;
     }
@@ -77,6 +68,6 @@ export default {
       coaches.push(coach);
     }
     context.commit("setCoach", coaches);
-    context.commit('setFetchTimeStamp');
+    context.commit("setFetchTimeStamp");
   },
 };

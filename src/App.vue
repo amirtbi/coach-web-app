@@ -1,9 +1,6 @@
 <template>
   <the-header></the-header>
-    <router-view>
-    
-    </router-view>
-
+  <router-view> </router-view>
 </template>
 
 <script>
@@ -41,19 +38,18 @@ body {
   transform: translateX(-100px);
 } */
 .route-enter-active {
-  animation:fade-in 1s ease-in
+  animation: fade-in 1s ease-in;
 }
 
 @keyframes fade-in {
-  from{
+  from {
     opacity: 0;
     transform: translateX(-100px);
   }
 
-  to{
+  to {
     opacity: 1;
     transform: translateX(0px);
   }
 }
-
 </style>

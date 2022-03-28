@@ -8,12 +8,12 @@
         <li class="main-header__link">
           <router-link to="/coaches">Coaches</router-link>
         </li>
-        <li class="main-header__link">
+        <li v-if="isLoggedIn" class="main-header__link">
           <router-link to="/request">Requests</router-link>
         </li>
         <li class="main-header__link">
           <router-link to="/auth">{{
-            $store.getters.token ? "logout" : "Login"
+            isLoggedIn ? "logout" : "Login"
           }}</router-link>
         </li>
       </ul>
@@ -23,6 +23,9 @@
 <script>
 export default {
   computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
     userIsAuth() {
       return this.$store.getters["users/userIsValid"];
     },

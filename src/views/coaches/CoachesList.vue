@@ -23,7 +23,7 @@
               Refresh Coach List
             </base-button>
             <!-- Only show when user is not coach or registered alreaddy -->
-            <base-button v-if="$store.getters.userId" link to="/register"
+            <base-button v-if="isLoggedIn && !isCoach" link to="/register"
               >Register as Coach</base-button
             >
           </div>
@@ -86,6 +86,9 @@ export default {
     this.show = true;
   },
   computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
     // Check the logged user is whether coach or not
     isCoach() {
       return this.$store.getters["coach/isCoach"];
