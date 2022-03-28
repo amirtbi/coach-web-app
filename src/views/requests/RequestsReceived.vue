@@ -1,38 +1,36 @@
 <template>
-<transition name="fade-in">
-  <section v-if='show'>
-    <base-modal @close="ErrorHandler" v-if="error" :title="error">
-      <template #header> </template>
-      <template #default>
-        <p id="modal-text">
-          Loading requests data from server has been experienced some
-          difficulties. Please try again!.
-        </p>
-      </template>
-    </base-modal>
-    <header>
-      <base-card>
-        <h1>List of your requests</h1>
-      </base-card>
-    </header>
-    <article>
-      <base-card>
-        <div v-if="isLoading" class="spinner-container">
-          <base-spinner></base-spinner>
-        </div>
-        <ul v-else-if="!isLoading && hasRequests">
-          <!-- request-item component -->
-          <request-item
-            v-for="request in requests"
-            :key="request.id"
-            :request="request"
-          ></request-item>
-        </ul>
-        <h4 v-else>You have not any requests yet!</h4>
-      </base-card>
-    </article>
-  </section>
-</transition>
+  <transition name="fade-in">
+    <section>
+      <base-modal
+        @closeHandler="close"
+        v-if="error"
+        description="Loading requests has faced some difficulties"
+        :title="error"
+      >
+      </base-modal>
+      <header>
+        <base-card>
+          <h1>List of your requests</h1>
+        </base-card>
+      </header>
+      <article>
+        <base-card>
+          <div v-if="isLoading" class="spinner-container">
+            <base-spinner></base-spinner>
+          </div>
+          <ul v-else-if="!isLoading && hasRequests">
+            <!-- request-item component -->
+            <request-item
+              v-for="request in requests"
+              :key="request.id"
+              :request="request"
+            ></request-item>
+          </ul>
+          <h4 v-else>You have not any requests yet!</h4>
+        </base-card>
+      </article>
+    </section>
+  </transition>
 </template>
 
 <script>
@@ -43,20 +41,14 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
+      isLoading: false,
       error: null,
-      show:false // intiial value for animation handling
-      
     };
   },
   mounted() {
     this.show = true;
   },
   methods: {
-    beforeRouteLeave (to, from, next) {
-      // Route animation display
-      this.show = false;
-    },
     async loadMessage() {
       this.isLoading = true;
       try {
@@ -66,8 +58,9 @@ export default {
       }
       this.isLoading = false;
     },
-    ErrorHandler() {
+    close() {
       this.error = null;
+      this.isLoading = false;
     },
   },
   created() {
@@ -81,7 +74,6 @@ export default {
     hasRequests() {
       return this.$store.getters["request/hasRequest"];
     },
-   
   },
 };
 </script>
@@ -134,15 +126,15 @@ p#modal-text {
   text-align: justify;
 }
 
-.fade-in-enter-from{
-  opacity:0;
+.fade-in-enter-from {
+  opacity: 0;
   transform: translateX(-100px);
 }
 
-.fade-in-enter-active{
+.fade-in-enter-active {
   transition: all 1s ease-in-out;
 }
-.fade-in-enter-to{
+.fade-in-enter-to {
   opacity: 1;
   transform: translateX(0);
 }

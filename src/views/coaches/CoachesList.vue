@@ -1,11 +1,10 @@
 <template>
-  <base-modal @close="ErrorHandler" v-if="error && show" :title="error">
-    <template #default>
-      <p id="modal-text">
-        Loading coaches data from server has been experienced some difficulties.
-        Please try again!.
-      </p>
-    </template>
+  <base-modal
+    @closeHandler="close"
+    v-if="!!error"
+    description="loading Requests has faced some difficulties"
+    :title="error"
+  >
   </base-modal>
 
   <transition name="fade">
@@ -32,7 +31,12 @@
               <base-spinner></base-spinner>
             </div>
 
-            <transition-group name="coachesList" tag="ul" class="coaches-container" v-else-if="hasCoaches && !isLoading">
+            <transition-group
+              name="coachesList"
+              tag="ul"
+              class="coaches-container"
+              v-else-if="hasCoaches && !isLoading"
+            >
               <coach-item
                 v-for="coach in filteredCoaches"
                 :id="coach.id"
@@ -115,7 +119,7 @@ export default {
       this.activeFilters = udpatedFilters;
       console.log("active filters", this.activeFilters);
     },
-    ErrorHandler() {
+    close() {
       this.error = null;
     },
     async loadCoaches(refresh = true) {
@@ -199,21 +203,21 @@ p#modal-text {
 }
 
 .coachesList-enter-from,
-.coachesList-leave-to{
+.coachesList-leave-to {
   opacity: 0;
   transform: translateX(-20px);
 }
 .coachesList-enter-active,
-.coachesList-leave-active{
+.coachesList-leave-active {
   transition: all 0.5s ease;
 }
 .coachesList-enter-to,
-.coachesList-leave-from{
+.coachesList-leave-from {
   opacity: 1;
   transform: translateX(0);
 }
 
-.coachesList-move{
+.coachesList-move {
   transition: transform 0.8s ease;
 }
 </style>
