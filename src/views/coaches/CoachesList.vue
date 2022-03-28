@@ -23,7 +23,9 @@
               Refresh Coach List
             </base-button>
             <!-- Only show when user is not coach or registered alreaddy -->
-            <base-button link to="/register">Register as Coach</base-button>
+            <base-button v-if="$store.getters.userId" link to="/register"
+              >Register as Coach</base-button
+            >
           </div>
 
           <section>

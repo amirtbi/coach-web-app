@@ -1,15 +1,14 @@
 <template>
-<div>
-  <base-modal v-if="$store.state.error" :title="$store.state.error">
-    <template #default>
-      <p id="modal-text">
-        Loading coaches data from server has been experienced some difficulties.
-        Please try again!.
-      </p>
-    </template>
-  </base-modal>
-  <coach-form @register-coach="addCoach"></coach-form>
-</div>
+  <div>
+    <base-modal
+      v-if="!!error"
+      @closeHandler="close"
+      :description="error"
+      title="An error occured"
+    >
+    </base-modal>
+    <coach-form @register-coach="addCoach"></coach-form>
+  </div>
 </template>
 
 <script>
@@ -19,9 +18,14 @@ export default {
     coachForm,
   },
   data() {
-    return {};
+    return {
+      error: null,
+    };
   },
   methods: {
+    close() {
+      this.error = null;
+    },
     async addCoach(data) {
       try {
         await this.$store.dispatch("coach/register", data);
@@ -30,7 +34,7 @@ export default {
           name: "coaches-list",
         });
       } catch (error) {
-        this.$store.state.error = error.message;
+        this.error = error.message || "Something went wrong";
       }
     },
   },
