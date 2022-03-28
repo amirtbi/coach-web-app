@@ -4,6 +4,7 @@ export default {
   },
 
   setRequests(state, payLoad) {
+    state.requests = [];
     state.requests = payLoad;
     // console.log("requests:",state.requests);
   },

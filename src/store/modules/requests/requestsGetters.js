@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export default {
   receivedMessages(state, _, rootGetters) {
     // Id of logged Coach

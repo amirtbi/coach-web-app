@@ -17,7 +17,8 @@ import notFound from "../views/notFound/notFound.vue";
 
 // import users feature
 import Login from "../views/users/Login.vue";
-//import UserSignup from '../views/users/UserSignup.vue';
+// Auth user
+import UserAuth from "../views/auth/UserAuth.vue";
 //routes
 
 const routes = [
@@ -46,15 +47,8 @@ const routes = [
     path: "/request",
     component: RequestReceived,
     meta: { needsAuth: true },
-    // beforeEnter: (to, from, next) => {
-    //   if (store.getters["users/userIsValid"]) {
-    //     next();
-    //   } else {
-    //     console.log("You must need to login, firstly");
-    //     next("/login");
-    //   }
-    // },
   },
+  { path: "/auth", component: UserAuth },
   { path: "/:notFound(.*)", component: notFound },
 
   { path: "/login", name: "login-page", component: Login },
@@ -65,10 +59,9 @@ const router = new createRouter({
   history: createWebHistory(),
   routes: routes,
   linkActiveClass: "router-link-active",
-  scrollBehavior(to,from,savedPosition){
-    return {top:0}
-  }
-  
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  },
 });
 
 // router.beforeEach((to, __2, next) => {

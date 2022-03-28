@@ -6,13 +6,13 @@
       </h1>
       <ul class="main-header__links">
         <li class="main-header__link">
-          <router-link  to="/coaches">Coaches</router-link>
-        </li>
-        <li v-if='userIsAuth' class="main-header__link">
-          <router-link to='/request'>Requests</router-link>
+          <router-link to="/coaches">Coaches</router-link>
         </li>
         <li class="main-header__link">
-          <router-link @click="navigateHandler"  :to="activeLink">{{ userIsAuth ? 'Logout' : 'Login' }}</router-link>
+          <router-link to="/request">Requests</router-link>
+        </li>
+        <li class="main-header__link">
+          <router-link to="/auth">Signup</router-link>
         </li>
       </ul>
     </nav>
@@ -20,26 +20,23 @@
 </template>
 <script>
 export default {
-
-  computed:{
-    userIsAuth(){
-      return this.$store.getters['users/userIsValid'];
+  computed: {
+    userIsAuth() {
+      return this.$store.getters["users/userIsValid"];
     },
-    activeLink(){
-      return '/login';
+    activeLink() {
+      return "/login";
     },
- 
   },
-  methods:{
-    navigateHandler(){
-      if(this.userIsAuth){
-        
+  methods: {
+    navigateHandler() {
+      if (this.userIsAuth) {
         this.$store.dispatch("users/logout");
-      }else{
+      } else {
         this.$router.push("/login");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -54,11 +51,11 @@ header.main-header {
   background-color: rgb(67 0 106);
   padding: 2rem;
 }
-.main-header a{
-    text-decoration:none;
-    padding: 0.75rem 1.5rem;
-    border: 1px solid transparent;
-    color:#f391e3;
+.main-header a {
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid transparent;
+  color: #f391e3;
 }
 .main-header__nav {
   width: 100%;
@@ -67,33 +64,29 @@ header.main-header {
   align-items: center;
 }
 
-
 .main-header__title {
   padding: 0;
 }
-.main-header__title a{
-    color:white;
+.main-header__title a {
+  color: white;
 }
 .main-header__links {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 2rem ;
+  padding: 0.8rem 2rem;
 }
-.main-header__link{
-    list-style-type: none;
-    margin-right: 2rem;
-    
-    /* border: 2px solid #f79fff; */
-    
+.main-header__link {
+  list-style-type: none;
+  margin-right: 2rem;
+
+  /* border: 2px solid #f79fff; */
 }
 
 a:active,
 a:hover,
-a.router-link-active{
-    border: 1px solid #f391e3 ;
-   
+a.router-link-active {
+  border: 1px solid #f391e3;
 }
-
 </style>
