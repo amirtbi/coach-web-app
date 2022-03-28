@@ -1,51 +1,46 @@
 <template>
   <teleport to="body">
-    
-    <div class="backdrop" v-if="show" @click="tryClose"></div>
-    
-      <dialog open v-if="show">
-        <div  class="modal-container">
-          <header class="modal-container__header">
-            <h1>
-              <slot name="header">{{ title }}</slot>
-            </h1>
-          </header>
-          <main class="modal-container__main">
-            <section>
-              <article class="modal-container__article">
-                <slot></slot>
-              </article>
-            </section>
-            <menu>
-              <div class="actions">
-                <slot name="actions">
-                  <base-button @click="tryClose">Confirm</base-button>
-                </slot>
-              </div>
-            </menu>
-          </main>
-        </div>
-      </dialog>
-  
+    <div class="backdrop" @click="tryClose"></div>
+
+    <dialog open>
+      <div class="modal-container">
+        <header class="modal-container__header">
+          <h1>
+            {{ title }}
+          </h1>
+        </header>
+        <main class="modal-container__main">
+          <section>
+            <article class="modal-container__article">
+              <slot>
+                <p>{{ description }}</p>
+              </slot>
+            </article>
+          </section>
+          <menu>
+            <div class="actions">
+              <slot name="actions">
+                <base-button @click="tryClose">Confirm</base-button>
+              </slot>
+            </div>
+          </menu>
+        </main>
+      </div>
+    </dialog>
   </teleport>
 </template>
 
 <script>
 export default {
-  emits: ["close"],
-  props: ["title"],
+  emits: ["closeHandler"],
+  props: ["title", "description"],
   data() {
-    return {
-      show: true,
-    };
+    return {};
   },
-  // mounted() {
-  //   this.show = true;
-  // },
+
   methods: {
     tryClose() {
-      this.show = false;
-      this.$emit("close");
+      this.$emit("closeHandler");
     },
   },
 };
@@ -139,6 +134,11 @@ h1 {
   width: 100%;
 
   margin: 0;
+}
+p {
+  color: white;
+  font-family: inherit;
+  font-weight: bold;
 }
 .dialog-enter-active {
   transition: all 1s ease-in;
