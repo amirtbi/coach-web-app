@@ -12,7 +12,9 @@
           <router-link to="/request">Requests</router-link>
         </li>
         <li class="main-header__link">
-          <router-link to="/auth">Signup</router-link>
+          <router-link to="/auth">{{
+            $store.getters.token ? "logout" : "Login"
+          }}</router-link>
         </li>
       </ul>
     </nav>
