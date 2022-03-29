@@ -65,6 +65,7 @@ export default {
   },
   created() {
     this.loadMessage();
+    console.log("loaded data", this.$store.getters["request/receivedMessages"]);
   },
   computed: {
     requests() {
