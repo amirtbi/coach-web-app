@@ -45,6 +45,7 @@
       </form>
       <div v-else>
         <h3>User Loggedin successfully</h3>
+        <p id="token">Logged token id:{{ $store.getters.userId }}</p>
         <base-button @click="logout">Logout</base-button>
       </div>
     </base-card>
@@ -115,7 +116,9 @@ export default {
           ///
           await this.$store.dispatch("signup", userEntry);
         }
-        this.$router.replace("/coaches");
+        // Redirect whether user is logged for new coach or not
+        const redirectUrl = "/" + (this.$route.query.redirect || "coaches");
+        this.$router.replace(redirectUrl);
       } catch (err) {
         console.log("Error", err.message);
         this.error = err.message || "Failed to authenticate";
@@ -186,6 +189,9 @@ a {
 p.register a:hover,
 p.register a:active {
   color: orangered;
+}
+p#token {
+  word-break: break-all;
 }
 #title {
   text-align: center;

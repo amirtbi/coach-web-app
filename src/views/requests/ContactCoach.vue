@@ -1,26 +1,25 @@
 <template>
   <transition name="fade-in">
-  <form v-if="show" @submit.prevent="submitForm">
-    <div class="form-control">
-      <label for="email">Your E-Mail</label>
-      <input
-        type="email"
-        id="email"
-        placeholder="name@email.com"
-        v-model.trim="email"
-      />
-    </div>
-    <div class="form-control">
-      <label for="message">Your message</label>
-      <textarea rows="5" id="message" v-model.trim="message"></textarea>
-    </div>
-    <p class="text-warning" v-if="!formIsValid">
-      You must fix errors or fill the blanks inputs
-    </p>
-    <div class="actions">
-      <base-button>Send Your Message</base-button>
-    </div>
-  </form>
+    <form v-if="show" @submit.prevent="submitForm">
+      <div class="form-control">
+        <label for="email">Your E-Mail</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="name@email.com"
+          v-model.trim="email"
+        />
+      </div>
+      <div class="form-control">
+        <label for="message">Your message</label>
+        <textarea rows="5" id="message" v-model.trim="message"></textarea>
+      </div>
+      <p class="text-warning" v-if="!formIsValid">Please check your entry</p>
+      <p class="text-warning" v-if="!!error">{{ error }}</p>
+      <div class="actions">
+        <base-button>Send Your Message</base-button>
+      </div>
+    </form>
   </transition>
 </template>
 
@@ -31,16 +30,13 @@ export default {
       email: "",
       message: "",
       formIsValid: true,
+      error: null,
       contactIsOpened: false,
-      show:false
-    
+      show: false,
     };
   },
 
   methods: {
-    beforeRouteLeave (to, from, next) {
-      this.show = false;
-    },
     async submitForm() {
       this.formIsValid = true;
       if (
@@ -61,15 +57,19 @@ export default {
       try {
         await this.$store.dispatch("request/addMessage", submittedMessage);
       } catch (error) {
-        console.log("Error in sending request:", error.message);
+        this.error = error.message || "Please try again";
       }
-      this.$router.push({ path: "/request" });
+
+      if (this.$store.getters.isAuthenticated) {
+        this.$router.push({ path: "/coaches" });
+      }
     },
-
-
   },
+
   mounted() {
     this.show = true;
+
+    console.log(this.$router);
   },
 };
 </script>
@@ -102,14 +102,14 @@ label {
   font-weight: bold;
 }
 
-.fade-in-enter-from{
+.fade-in-enter-from {
   opacity: 0;
   transform: translateY(-100px);
 }
-.fade-in-enter-active{
+.fade-in-enter-active {
   transition: all 1s ease-in;
 }
-.fade-in-enter-to{
+.fade-in-enter-to {
   opacity: 1;
   transform: translateY(0px);
 }
