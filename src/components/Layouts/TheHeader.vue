@@ -12,9 +12,9 @@
           <router-link to="/request">Requests</router-link>
         </li>
         <li class="main-header__link">
-          <router-link to="/auth">{{
+          <base-button @click="navigateHandler">{{
             isLoggedIn ? "logout" : "Login"
-          }}</router-link>
+          }}</base-button>
         </li>
       </ul>
     </nav>
@@ -26,19 +26,14 @@ export default {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
     },
-    userIsAuth() {
-      return this.$store.getters["users/userIsValid"];
-    },
-    activeLink() {
-      return "/login";
-    },
   },
   methods: {
     navigateHandler() {
-      if (this.userIsAuth) {
-        this.$store.dispatch("users/logout");
+      if (this.isLoggedIn) {
+        this.$store.dispatch("logout");
+        this.$router.push("/coaches");
       } else {
-        this.$router.push("/login");
+        this.$router.push("/auth");
       }
     },
   },

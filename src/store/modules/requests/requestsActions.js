@@ -22,7 +22,7 @@ export default {
     console.log("send contact data:", response);
     // const responseData = await response.data;
     if (!response.statusText === ok) {
-      const newError = newError(response.message);
+      const newError = new Error(response.message);
       throw newError;
     }
     // Adding  id and coachId property, after sending requests to server

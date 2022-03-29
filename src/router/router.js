@@ -35,13 +35,17 @@ const routes = [
       },
     ],
   },
-  { path: "/register", component: coachRegisteration },
+  {
+    path: "/register",
+    component: coachRegisteration,
+    meta: { requiresAuth: true },
+  },
   {
     path: "/request",
     component: RequestReceived,
-    meta: { needsAuth: true },
+    meta: { requiresAuth: true },
   },
-  { path: "/auth", component: UserAuth },
+  { path: "/auth", component: UserAuth, meta: { requiresUnAuth: true } },
   { path: "/:notFound(.*)", component: notFound },
 
   // { path: "/userSignup", name: "Signup-page", component: UserSignup },
@@ -56,14 +60,16 @@ const router = new createRouter({
   },
 });
 
-// router.beforeEach((to, __2, next) => {
-//   // to and from are both route objects. must call `next`.
-//   const userIsLogged = store.getters["users/userIsValid"];
-//   if (to.meta.needsAuth && userIsLogged) {
-//     next();
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  // to and from are both route objects. must call `next`.
+  const userIsLogged = store.getters.isAuthenticated;
+  if (to.meta.requiresAuth && !userIsLogged) {
+    next("/auth");
+  } else if (to.meta.requiresUnAuth && userIsLogged) {
+    next("/coaches");
+  } else {
+    next();
+  }
+});
 
 export default router;
