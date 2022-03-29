@@ -23,8 +23,11 @@
               Refresh Coach List
             </base-button>
             <!-- Only show when user is not coach or registered alreaddy -->
-            <base-button v-if="isLoggedIn && !isCoach" link to="/register"
+            <base-button v-if="isLoggedIn" link to="/register"
               >Register as Coach</base-button
+            >
+            <base-button v-else link to="/auth?redirect=register"
+              >Login to register as a new coach</base-button
             >
           </div>
 
