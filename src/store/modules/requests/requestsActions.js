@@ -9,10 +9,13 @@ export default {
       message: payLoad.message,
       profile: `image${rndImage}`,
     };
+    const token = context.rootGetters.token;
     // Sending a new request to server
     const response = await axios({
       method: "POST",
-      url: `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${payLoad.coachId}.json`,
+      url:
+        `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${payLoad.coachId}.json?auth=` +
+        token,
       data: newRequest,
     });
 
@@ -32,13 +35,17 @@ export default {
   async loadRequests(context) {
     const token = context.rootGetters.token;
     const coachId = context.rootGetters.userId;
+    // const response = await axios.get(
+    //   `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${coachId}.json?auth=` +
+    //     token
+    // );
+
     const response = await axios.get(
-      `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${coachId}.json?auth=` +
+      `https://coach-app-c1d0e-default-rtdb.firebaseio.com/requests/${coachId}.json?=auth=` +
         token
     );
-
-    const responseData = response.data;
-
+    const responseData = await response.data;
+    console.log("Requests", responseData);
     // Helper requests object
     const requests = [];
     for (const key in responseData) {
@@ -51,6 +58,7 @@ export default {
       };
       requests.push(request);
     }
+    console.log(requests);
     // Set requests array to new values
     context.commit("setRequests", requests);
   },
