@@ -2,9 +2,6 @@ import store from "../store/index.js";
 
 import { createRouter, createWebHistory } from "vue-router";
 
-//importing components
-//import Home from "../views/home.vue";
-
 //import coache feature
 import CoachesList from "../views/coaches/CoachesList.vue";
 import CoachDetails from "../views/coaches/CoachDetails.vue";

@@ -13,10 +13,21 @@ export default {
     return {};
   },
   methods: {},
-  computed: {},
+  computed: {
+    didAutologout() {
+      return this.$store.getters.didAutologout;
+    },
+  },
   created() {
     // Auto login when data is stored in localstorage
     this.$store.dispatch("autoLogin");
+  },
+  watch: {
+    didAutologout(currValue, oldValue) {
+      if (currValue && currValue !== oldValue) {
+        this.$router.replace("/coaches");
+      }
+    },
   },
 };
 </script>

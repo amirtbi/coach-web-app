@@ -22,10 +22,12 @@ export default {
       error: null,
     };
   },
+
   methods: {
     close() {
       this.error = null;
     },
+
     async addCoach(data) {
       try {
         await this.$store.dispatch("coach/register", data);

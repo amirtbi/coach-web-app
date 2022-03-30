@@ -53,8 +53,7 @@ export default {
     const tokenExpirationDate = new Date().getTime() + expiresIn;
 
     timer = setTimeout(() => {
-      console.log("logout...");
-      context.dispatch("logout");
+      context.dispatch("autoLogout");
     }, expiresIn);
 
     // Storing logging user in localstorage
@@ -71,20 +70,27 @@ export default {
     const userId = localStorage.getItem("userId");
     const tokenExpiration = localStorage.getItem("tokenExpiration");
 
+    // Current duration left
     const expiresIn = +tokenExpiration - new Date().getTime();
 
+    // logout
     if (expiresIn < 0) {
       return;
     }
 
     timer = setTimeout(() => {
-      context.dispatch("logout");
+      context.dispatch("autoLogout");
     }, expiresIn);
+
     if (token && userId) {
       context.commit("setUser", {
         token: token,
         userId: userId,
       });
     }
+  },
+  autoLogout(context) {
+    context.dispatch("logout");
+    context.commit("setAutologout");
   },
 };

@@ -63,6 +63,7 @@ export default {
       this.isLoading = false;
     },
   },
+
   created() {
     this.loadMessage();
     console.log("loaded data", this.$store.getters["request/receivedMessages"]);
