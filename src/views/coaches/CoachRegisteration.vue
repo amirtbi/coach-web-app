@@ -29,7 +29,7 @@ export default {
     async addCoach(data) {
       try {
         await this.$store.dispatch("coach/register", data);
-        await this.$router.push({
+        this.$router.push({
           path: "/coaches",
           name: "coaches-list",
         });

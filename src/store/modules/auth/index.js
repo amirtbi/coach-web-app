@@ -7,7 +7,7 @@ export default {
     return {
       userId: null,
       token: null,
-      tokenExpiration: null, // Id of logged user/coach
+
       loggedMessage: [],
     };
   },

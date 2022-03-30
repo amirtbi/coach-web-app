@@ -108,7 +108,7 @@ export default {
       const userEntry = {
         email: this.email,
         password: this.password,
-        mode:this.mode
+        mode: this.mode,
       };
       try {
         if (this.mode === "login") {
@@ -119,7 +119,8 @@ export default {
         }
         // Redirect whether user is logged for new coach or not
         const redirectUrl = "/" + (this.$route.query.redirect || "coaches");
-        this.$router.replace(redirectUrl);
+        console.log("redirected", redirectUrl);
+        this.$router.push(redirectUrl);
       } catch (err) {
         console.log("Error", err.message);
         this.error = err.message || "Failed to authenticate";

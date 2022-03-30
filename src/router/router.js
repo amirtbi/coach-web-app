@@ -15,14 +15,12 @@ import ContactCoach from "../views/requests/ContactCoach.vue";
 import RequestReceived from "../views/requests/RequestsReceived.vue";
 import notFound from "../views/notFound/notFound.vue";
 
-// import users feature
-import Login from "../views/users/Login.vue";
 // Auth user
 import UserAuth from "../views/auth/UserAuth.vue";
 //routes
 
 const routes = [
-  { path: "/", component: CoachesList },
+  { path: "/", redirect: "/coaches" },
   { path: "/coaches", component: CoachesList, name: "coaches-list" },
   {
     path: "/coaches/:id",
@@ -60,9 +58,10 @@ const router = new createRouter({
   },
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   // to and from are both route objects. must call `next`.
-  const userIsLogged = store.getters.isAuthenticated;
+  let userIsLogged = store.getters.isAuthenticated;
+  console.log("loggin status", userIsLogged);
   if (to.meta.requiresAuth && !userIsLogged) {
     next("/auth");
   } else if (to.meta.requiresUnAuth && userIsLogged) {
