@@ -14,6 +14,10 @@ export default {
   },
   methods: {},
   computed: {},
+  created() {
+    // Auto login when data is stored in localstorage
+    this.$store.dispatch("autoLogin");
+  },
 };
 </script>
 
