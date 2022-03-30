@@ -9,10 +9,24 @@ export default {
     });
   },
   async login(context, payload) {
+    context.dispatch("auth", payload);
+  },
+  async signup(context, payLoad) {
+    context.dispatch("auth", payLoad);
+  },
+  async auth(context, payload) {
     const API_KEY = "AIzaSyB0EHwdreOg-ByX5aK02QzYxx_rKWNXM9Y";
+    let url = "";
+    if (payload.mode === "login") {
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
+    } else if (payload.mode === "signup") {
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+    }
+
+    // Sending request
     const response = await axios({
       method: "POST",
-      url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
+      url: url,
       data: {
         email: payload.email,
         password: payload.password,
@@ -21,41 +35,12 @@ export default {
     });
 
     const responseData = await response.data;
-    console.log(responseData);
-    if (response.status != 200) {
-      const error = new Error(responseData.error || "Please check your entry");
-      throw error;
-    }
-    console.log(response);
-    console.log(responseData);
-    context.commit("setUser", {
-      token: responseData.idToken,
-      userId: responseData.localId,
-      tokenExpiration: responseData.expiresIn,
-    });
-  },
-  async signup(context, payLoad) {
-    const API_KEY = "AIzaSyB0EHwdreOg-ByX5aK02QzYxx_rKWNXM9Y";
-    // const API_KEY = state.API_KEY;
-    // Send http request...
-    const response = await axios({
-      method: "POST",
-      url: `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
-      data: {
-        email: payLoad.email,
-        password: payLoad.password,
-        returnSecureToken: true,
-      },
-    });
 
-    const responseData = await response.data;
-    console.log(responseData);
     if (response.status != 200) {
       const error = new Error(responseData.error || "Please check your entry");
       throw error;
     }
-    console.log(response);
-    console.log(responseData);
+
     context.commit("setUser", {
       token: responseData.idToken,
       userId: responseData.localId,

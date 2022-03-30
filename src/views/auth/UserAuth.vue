@@ -108,6 +108,7 @@ export default {
       const userEntry = {
         email: this.email,
         password: this.password,
+        mode:this.mode
       };
       try {
         if (this.mode === "login") {
